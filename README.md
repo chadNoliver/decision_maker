@@ -1,5 +1,14 @@
 # DecisionMaker
 
+## This is a Phoenix Web App designed to make decisions for users.  It will 
+allow multiple users to view and edit choices for a decision concurrently.  It 
+will then allow users to participate in the random selection of one of these 
+choices.    
+Phoenix is chosen as a framework in order to explore the ease of concurrent 
+connections using live view.  This will allow users to collaborate while making 
+options and participating in the random selection of the final decision.
+
+## Running
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
