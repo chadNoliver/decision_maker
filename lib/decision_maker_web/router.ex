@@ -20,7 +20,8 @@ defmodule DecisionMakerWeb.Router do
     get "/", PageController, :home
     live "/choices", ChoiceLive.Index, :index
     live "/choices/new", ChoiceLive.Index, :new
-    live "/choices/edit", ChoicesLive.Index, :edit
+    live "/choices/:id/edit", ChoiceLive.Index, :edit
+
 
     live "/choices/:id", ChoiceLive.Show, :show
     live "/choices/:id/show/edit", ChoiceLive.Show, :edit

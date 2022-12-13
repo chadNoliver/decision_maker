@@ -18,7 +18,8 @@ defmodule DecisionMaker.ChoiceTable do
 
   """
   def list_choices do
-    Repo.all(Choice)
+    Repo.all(from c in Choice, order_by: [desc: c.id])
+    # Repo.all(Choice)
   end
 
   @doc """
@@ -72,6 +73,7 @@ defmodule DecisionMaker.ChoiceTable do
     choice
     |> Choice.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:choice_updated)
   end
 
   @doc """
@@ -87,7 +89,9 @@ defmodule DecisionMaker.ChoiceTable do
 
   """
   def delete_choice(%Choice{} = choice) do
-    Repo.delete(choice)
+    choice
+    |> Repo.delete()
+    |> broadcast(:choice_deleted)
   end
 
   @doc """
