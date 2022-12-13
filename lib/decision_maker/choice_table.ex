@@ -53,6 +53,7 @@ defmodule DecisionMaker.ChoiceTable do
     %Choice{}
     |> Choice.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:choice_created)
   end
 
   @doc """
@@ -100,5 +101,16 @@ defmodule DecisionMaker.ChoiceTable do
   """
   def change_choice(%Choice{} = choice, attrs \\ %{}) do
     Choice.changeset(choice, attrs)
+  end
+  
+  def subscribe do
+    Phoenix.PubSub.subscribe(DecisionMaker.PubSub, "choices")
+  end
+
+  
+  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:ok, choice}, event) do
+    Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "choices", {event, choice})
+      {:ok, choice}
   end
 end
