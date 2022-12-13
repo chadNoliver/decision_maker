@@ -1,0 +1,41 @@
+<.header>
+  Listing Choices
+  <:actions>
+    <.link patch={~p"/choices/new"}>
+      <.button>New Choice</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="choices" rows={@choices} row_click={&JS.navigate(~p"/choices/#{&1}")}>
+  <:col :let={choice} label="Username"><%= choice.username %></:col>
+  <:col :let={choice} label="Body"><%= choice.body %></:col>
+  <:col :let={choice} label="Weight"><%= choice.weight %></:col>
+  <:action :let={choice}>
+    <div class="sr-only">
+      <.link navigate={~p"/choices/#{choice}"}>Show</.link>
+    </div>
+    <.link patch={~p"/choices/#{choice}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={choice}>
+    <.link phx-click={JS.push("delete", value: %{id: choice.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="choice-modal"
+  show
+  on_cancel={JS.navigate(~p"/choices")}
+>
+  <.live_component
+    module={DecisionMakerWeb.ChoiceLive.FormComponent}
+    id={@choice.id || :new}
+    title={@page_title}
+    action={@live_action}
+    choice={@choice}
+    navigate={~p"/choices"}
+  />
+</.modal>
