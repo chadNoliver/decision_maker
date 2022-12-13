@@ -18,6 +18,12 @@ defmodule DecisionMakerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/choices", ChoiceLive.Index, :index
+    live "/choces/new", ChoiceLive.Index, :new
+    live "/choices/edit", ChoicesLive.Index, :edit
+
+    live "/choices/:id", ChoiceLive.Show, :show
+    live "/choices/:id/show/edit", ChoiceLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
