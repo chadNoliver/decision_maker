@@ -1,6 +1,7 @@
 # DecisionMaker
 
-## This is a Phoenix Web App designed to make decisions for users.  It will 
+## Description   
+This is a Phoenix Web App designed to make decisions for users.  It will 
 allow multiple users to view and edit choices for a decision concurrently.  It 
 will then allow users to participate in the random selection of one of these 
 choices.    
