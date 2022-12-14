@@ -1,6 +1,5 @@
 defmodule DecisionMakerWeb.ChoiceLive.Index do
   use DecisionMakerWeb, :live_view
-
   alias DecisionMaker.ChoiceTable
   alias DecisionMaker.ChoiceTable.Choice
 
@@ -41,20 +40,18 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     {:noreply, assign(socket, :choices, list_choices())}
   end
 
-@impl true
-def handle_info({:choice_created, choice}, socket) do
-  {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
-end
+  @impl true
+  def handle_info({:choice_created, choice}, socket) do
+    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
+  end
 
-def update_info({:choice_updated, choice}, socket) do
-  {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
-end
+  def update_info({:choice_updated, choice}, socket) do
+    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
+  end
 
-def delete_info({:choice_deleted, choice}, socket) do
-  {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
-end
-
-
+  def delete_info({:choice_deleted, choice}, socket) do
+    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
+  end
 
   defp list_choices do
     ChoiceTable.list_choices()
