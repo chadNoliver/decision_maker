@@ -89,9 +89,8 @@ defmodule DecisionMaker.ChoiceTable do
 
   """
   def delete_choice(%Choice{} = choice) do
-    choice
-    |> Repo.delete()
-    |> broadcast(:choice_deleted)
+    {:ok, %Choice{}} = Repo.delete(choice)
+    broadcast({:ok, choice}, :choice_deleted)
   end
 
   @doc """

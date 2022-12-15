@@ -37,7 +37,7 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     choice = ChoiceTable.get_choice!(id)
     {:ok, _} = ChoiceTable.delete_choice(choice)
 
-    {:noreply, assign(socket, :choices, list_choices())}
+    {:noreply, socket}
   end
 
   @impl true
@@ -45,13 +45,14 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
   end
 
-  def update_info({:choice_updated, choice}, socket) do
+  def handle_info({:choice_deleted, choice}, socket) do
+    {:noreply, update(socket, :choices, fn choices -> choices -- [choice] end)}
+  end
+
+  def handle_info({:choice_updated, choice}, socket) do
     {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
   end
 
-  def delete_info({:choice_deleted, choice}, socket) do
-    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
-  end
 
   defp list_choices do
     ChoiceTable.list_choices()
