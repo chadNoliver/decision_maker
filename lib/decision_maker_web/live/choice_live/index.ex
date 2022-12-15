@@ -6,7 +6,8 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: ChoiceTable.subscribe()
-    {:ok, assign(socket, :choices, list_choices()), temporary_assigns: [posts: []]}
+    # {:ok, assign(socket, :choices, list_choices()), temporary_assigns: [choices: []]}
+    {:ok, assign(socket, :choices, list_choices())}
   end
 
   @impl true
