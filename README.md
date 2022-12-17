@@ -33,9 +33,9 @@ this repository:
 tree -I '_build|deps|priv|test'
 
  .
-├── README.md                              //You are here 
-├── _build                                 //
-├── assets
+├── README.md   //You are here 
+├── _build      //Compilation artifacts
+├── assets      //Source code for front-end assets, bundled by `esbuild` tool
 │   ├── css
 │   │   └── app.css
 │   ├── js
@@ -43,24 +43,24 @@ tree -I '_build|deps|priv|test'
 │   ├── tailwind.config.js
 │   └── vendor
 │       └── topbar.js
-├── config
-│   ├── config.exs
-│   ├── dev.exs
-│   ├── prod.exs
-│   ├── runtime.exs
-│   └── test.exs
-├── deps
-├── lib
-│   ├── decision_maker
-│   │   ├── application.ex
-│   │   ├── choice_table
+├── config            //Project configuration
+│   ├── config.exs    //Entry point for configuration, imports rest of configs
+│   ├── dev.exs       //Dev environment specific config
+│   ├── prod.exs      //Prod environment specific config
+│   ├── runtime.exs   //Last executed, best for read secrets/dynamic config 
+│   └── test.exs      //Test environment specific config
+├── deps              //Mix dependencies (listed in `mix.exs` `defp deps do`)
+├── lib                             //Application source code
+│   ├── decision_maker              //MVC Model
+│   │   ├── application.ex          //Starts db, pubsub, etc
+│   │   ├── choice_table   
 │   │   │   └── choice.ex
 │   │   ├── choice_table.ex
-│   │   ├── mailer.ex
+│   │   ├── mailer.ex               //For sending emails - unused 
 │   │   ├── random.ex
-│   │   └── repo.ex
+│   │   └── repo.ex                 //Main intercface to database
 │   ├── decision_maker.ex
-│   ├── decision_maker_web
+│   ├── decision_maker_web          //MVC View & Controller
 │   │   ├── components
 │   │   │   ├── core_components.ex
 │   │   │   ├── layouts
@@ -74,8 +74,8 @@ tree -I '_build|deps|priv|test'
 │   │   │   ├── page_html
 │   │   │   │   └── home.html.heex
 │   │   │   └── page_html.ex
-│   │   ├── endpoint.ex
-│   │   ├── gettext.ex
+│   │   ├── endpoint.ex           //Entry point for HTTP request leads to router
+│   │   ├── gettext.ex            //For internationalization of text, unused
 │   │   ├── live
 │   │   │   └── choice_live
 │   │   │       ├── form_component.ex
@@ -83,18 +83,20 @@ tree -I '_build|deps|priv|test'
 │   │   │       ├── index.html.heex
 │   │   │       ├── show.ex
 │   │   │       └── show.html.heex
-│   │   ├── router.ex
-│   │   └── telemetry.ex
+│   │   ├── router.ex           //Rules to dispatch requests to controllers
+│   │   └── telemetry.ex        //Defines telemetry supervisor
 │   └── decision_maker_web.ex
 ├── logs
 ├── mix.exs
 ├── mix.lock
-├── priv                                     //TODO
-└── test                                     //TODO
-   
+├── priv  //Production resources, but not source code (images, db scripts)
+└── test  //Applicatoin tests (mirrors `./lib`)
  
 ```
-
+### Notes
+  - Router maps unique HTTP verb/path pairs to controller action pairs.  
+  - Controllers - elixir modules; actions - `/2` functions defined within them
+  - 
 ## Running
 To start your Phoenix server:
 
