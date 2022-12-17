@@ -6,16 +6,15 @@
     </.link>
   </:actions>
 </.header>
-<.modal
->
+
   <.live_component
-    id={@choice.id }
+    id="table-component"
     module={DecisionMakerWeb.ChoiceLive.ChoiceComponent}
     action={@live_action}
     choice={@choice}
+    choices={@choices}
   />
 
-</.modal>
 <.modal
   :if={@live_action in [:new, :edit]}
   id="choice-modal"

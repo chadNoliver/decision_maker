@@ -1,10 +1,12 @@
 defmodule DecisionMakerWeb.ChoiceLive.ChoiceComponent do
   use DecisionMakerWeb, :live_component
+  alias DecisionMaker.ChoiceTable
+  alias DecisionMaker.ChoiceTable.Choice
 
   def render(assigns) do
     ~H"""
     <div>
-      <.table id="choices" rows={@choices} row_click={&JS.navigate(~p"/choices/#{&1}")}>
+      <.table id="table-component" rows={@choices} row_click={&JS.navigate(~p"/choices/#{&1}")}>
         <:col :let={choice} label="Username"><%= choice.username %></:col>
         <:col :let={choice} label="Body"><%= choice.body %></:col>
         <:col :let={choice} label="Weight"><%= choice.weight %></:col>
@@ -23,5 +25,5 @@ defmodule DecisionMakerWeb.ChoiceLive.ChoiceComponent do
     </div>
     """
   end
-
 end
+
