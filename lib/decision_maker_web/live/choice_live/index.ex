@@ -50,8 +50,8 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     {:noreply, update(socket, :choices, fn choices -> choices -- [choice] end)}
   end
 
-  def handle_info({:choice_updated, choice}, socket) do
-    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
+  def handle_info({:choice_updated, _choice}, socket) do
+    {:noreply, assign(socket, :choices, list_choices())}
   end
 
 

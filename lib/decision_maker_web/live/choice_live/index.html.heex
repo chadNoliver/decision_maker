@@ -7,13 +7,13 @@
   </:actions>
 </.header>
 
-  <.live_component
-    id="table-component"
-    module={DecisionMakerWeb.ChoiceLive.ChoiceComponent}
-    action={@live_action}
-    choice={@choice}
-    choices={@choices}
-  />
+<.live_component
+  id="choices"
+  module={DecisionMakerWeb.ChoiceLive.ChoiceComponent}
+  action={@live_action}
+  phx-update="replace"
+  choices={@choices}
+/>
 
 <.modal
   :if={@live_action in [:new, :edit]}
