@@ -14,6 +14,7 @@ options and participating in the random selection of the final decision.
 - [x] Postgres  
 - [x] CRUD  
 - [x] PubSub  
+- [ ] Add initial annotations
 - [ ] Random selection  
 - [ ] Actual users/usernames  
 - [ ] Multiple cursors/evidence of multiple users  
@@ -22,6 +23,80 @@ options and participating in the random selection of the final decision.
 - [ ] Distribute through Fly.io   
 - [ ] Github Actions for easy deployment
 
+## Annotations  
+These annotations are derived from the following `hexdocs` and tailored for 
+this repository:  
+  - https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html
+  - https://hexdocs.pm/phoenix/1.7.0-rc.0/overview.html 
+
+```tree
+tree -I '_build|deps|priv|test'
+
+ .
+├── README.md   //You are here 
+├── _build      //Compilation artifacts
+├── assets      //Source code for front-end assets, bundled by `esbuild` tool
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   └── app.js
+│   ├── tailwind.config.js
+│   └── vendor
+│       └── topbar.js
+├── config            //Project configuration
+│   ├── config.exs    //Entry point for configuration, imports rest of configs
+│   ├── dev.exs       //Dev environment specific config
+│   ├── prod.exs      //Prod environment specific config
+│   ├── runtime.exs   //Last executed, best for read secrets/dynamic config 
+│   └── test.exs      //Test environment specific config
+├── deps              //Mix dependencies (listed in `mix.exs` `defp deps do`)
+├── lib                             //Application source code
+│   ├── decision_maker              //MVC Model
+│   │   ├── application.ex          //Starts db, pubsub, etc
+│   │   ├── choice_table   
+│   │   │   └── choice.ex
+│   │   ├── choice_table.ex
+│   │   ├── mailer.ex               //For sending emails - unused 
+│   │   ├── random.ex
+│   │   └── repo.ex                 //Main intercface to database
+│   ├── decision_maker.ex
+│   ├── decision_maker_web          //MVC View & Controller
+│   │   ├── components
+│   │   │   ├── core_components.ex
+│   │   │   ├── layouts
+│   │   │   │   ├── app.html.heex
+│   │   │   │   └── root.html.heex
+│   │   │   └── layouts.ex
+│   │   ├── controllers
+│   │   │   ├── error_html.ex
+│   │   │   ├── error_json.ex
+│   │   │   ├── page_controller.ex
+│   │   │   ├── page_html
+│   │   │   │   └── home.html.heex
+│   │   │   └── page_html.ex
+│   │   ├── endpoint.ex           //Entry point for HTTP request leads to router
+│   │   ├── gettext.ex            //For internationalization of text, unused
+│   │   ├── live
+│   │   │   └── choice_live
+│   │   │       ├── form_component.ex
+│   │   │       ├── index.ex
+│   │   │       ├── index.html.heex
+│   │   │       ├── show.ex
+│   │   │       └── show.html.heex
+│   │   ├── router.ex           //Rules to dispatch requests to controllers
+│   │   └── telemetry.ex        //Defines telemetry supervisor
+│   └── decision_maker_web.ex
+├── logs
+├── mix.exs
+├── mix.lock
+├── priv  //Production resources, but not source code (images, db scripts)
+└── test  //Applicatoin tests (mirrors `./lib`)
+ 
+```
+### Notes
+  - Router maps unique HTTP verb/path pairs to controller action pairs.  
+  - Controllers - elixir modules; actions - `/2` functions defined within them
+  - 
 ## Running
 To start your Phoenix server:
 
