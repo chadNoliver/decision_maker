@@ -116,4 +116,8 @@ defmodule DecisionMaker.ChoiceTable do
     Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "choices", {event, choice})
       {:ok, choice}
   end
+  defp broadcast({:ok, random}, event) do
+    Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "randoms", {event, random})
+      {:ok, random}
+  end
 end

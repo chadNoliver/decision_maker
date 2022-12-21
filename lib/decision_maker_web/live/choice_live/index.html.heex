@@ -8,6 +8,15 @@
 </.header>
 
 <.live_component
+  id="randoms"
+  module={DecisionMakerWeb.ChoiceLive.RandomComponent}
+  action={@live_action}
+  phx-update="replace"
+  randoms={@randoms}
+/>
+
+
+<.live_component
   id="choices"
   module={DecisionMakerWeb.ChoiceLive.ChoiceComponent}
   action={@live_action}

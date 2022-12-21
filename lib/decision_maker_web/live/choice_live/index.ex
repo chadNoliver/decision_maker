@@ -6,8 +6,11 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: ChoiceTable.subscribe()
-    # {:ok, assign(socket, :choices, list_choices()), temporary_assigns: [choices: []]}
-    {:ok, assign(socket, :choices, list_choices())}
+    if connected?(socket), do: Phoenix.PubSub.subscribe(DecisionMaker.PubSub,"random_updated")
+    {:ok, socket
+    |> assign(:choices, list_choices())
+    |> assign(:randoms, list_randoms())
+    }
   end
 
   @impl true
@@ -41,6 +44,13 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     {:noreply, socket}
   end
 
+  def handle_event("random_updated", _value, socket) do
+    new_random = Enum.random(0..99)
+    broadcast_random(new_random)
+    {:noreply, assign(socket, :randoms, new_random)}
+  end
+
+
   @impl true
   def handle_info({:choice_created, choice}, socket) do
     {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
@@ -54,8 +64,26 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     {:noreply, assign(socket, :choices, list_choices())}
   end
 
+  def handle_info({:random_updated, random}, socket) do
+    {:noreply, assign(socket, :randoms, random )}
+  end
+
+  defp broadcast_random(random) do
+    Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "random_updated", {:random_updated, random})
+  end
 
   defp list_choices do
     ChoiceTable.list_choices()
   end
+
+  defp list_randoms do
+    if (:randoms == nil) do
+      {" "}
+    end
+
+    unless (:randoms != nil) do
+      { :randoms }
+    end
+  end
+
 end
