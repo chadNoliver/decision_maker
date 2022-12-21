@@ -1,7 +1,9 @@
 defmodule DecisionMakerWeb.ChoiceLive.Index do
   use DecisionMakerWeb, :live_view
+  import Ecto.Query
   alias DecisionMaker.ChoiceTable
   alias DecisionMaker.ChoiceTable.Choice
+  alias DecisionMaker.Repo
 
   @impl true
   def mount(_params, _session, socket) do
@@ -36,6 +38,16 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
     |> assign(:choice, nil)
   end
 
+  def random_query() do
+    query = 
+      from c in "choices",
+      order_by: fragment("Random()"),
+      limit: 1,
+      select: c.body
+    Repo.all(query)
+  end
+
+
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     choice = ChoiceTable.get_choice!(id)
@@ -45,7 +57,8 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   end
 
   def handle_event("random_updated", _value, socket) do
-    new_random = Enum.random(0..99)
+    new_random = random_query()
+    # new_random = Enum.random(0..99)
     broadcast_random(new_random)
     {:noreply, assign(socket, :randoms, new_random)}
   end
@@ -53,11 +66,11 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
 
   @impl true
   def handle_info({:choice_created, choice}, socket) do
-    {:noreply, update(socket, :choices, fn choices -> [choice | choices] end)}
+    {:noreply, Phoenix.Component.update(socket, :choices, fn choices -> [choice | choices] end)}
   end
 
   def handle_info({:choice_deleted, choice}, socket) do
-    {:noreply, update(socket, :choices, fn choices -> choices -- [choice] end)}
+    {:noreply, Phoenix.Component.update(socket, :choices, fn choices -> choices -- [choice] end)}
   end
 
   def handle_info({:choice_updated, _choice}, socket) do
