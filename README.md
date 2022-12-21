@@ -14,12 +14,12 @@ options and participating in the random selection of the final decision.
 - [x] Postgres  
 - [x] CRUD  
 - [x] PubSub  
-- [ ] Add initial annotations
-- [ ] Random selection  
+- [X] Add initial annotations
+- [X] Random selection  
+- [ ] Animations for random selection  
 - [ ] Actual users/usernames  
 - [ ] Multiple cursors/evidence of multiple users  
 - [ ] Multiple Stages of random selection  
-- [ ] Animations for random selection  
 - [ ] Distribute through Fly.io   
 - [ ] Github Actions for easy deployment
 
