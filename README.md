@@ -16,12 +16,15 @@ options and participating in the random selection of the final decision.
 - [x] PubSub  
 - [X] Add initial annotations
 - [X] Random selection  
-- [ ] Animations for random selection  
+- [X] Animations for random selection  
 - [ ] Actual users/usernames  
 - [ ] Multiple cursors/evidence of multiple users  
 - [ ] Multiple Stages of random selection  
+- [ ] Home screen
+- [ ] Github Actions for testing 
+- [ ] Multiple channels for users to have private channels/topics 
+- [ ] Basic text chat feature
 - [ ] Distribute through Fly.io   
-- [ ] Github Actions for easy deployment
 
 ## Annotations  
 These annotations are derived from the following `hexdocs` and tailored for 
