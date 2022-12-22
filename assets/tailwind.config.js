@@ -13,6 +13,15 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+      },
+      keyframes: {
+        spin: {
+          '0%, 100%': { transform: 'rotate(-180deg)', background: 'green' },
+          '50%': { transform: 'rotate(180deg)' , background: 'blue'}
+        }
+      },
+      animation: {
+        spin: 'spin 2s ease-in-out infinite',
       }
     },
   },

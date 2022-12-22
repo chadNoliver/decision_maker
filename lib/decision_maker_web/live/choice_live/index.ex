@@ -78,7 +78,12 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   end
 
   def handle_info({:random_updated, random}, socket) do
-    {:noreply, assign(socket, :randoms, random )}
+    socket =
+      socket
+    |> assign(:randoms, random)
+    |> push_event("spin", %{id: "randoms-show"})
+
+    {:noreply, socket}
   end
 
   defp broadcast_random(random) do

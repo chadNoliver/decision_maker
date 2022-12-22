@@ -30,6 +30,13 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", info => topbar.delayedShow(200))
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
+window.addEventListener(`phx:spin`, (e) => {
+  let el = document.getElementById(e.detail.id)
+  if(el) {
+    liveSocket.execJS(el, el.getAttribute("data-spin"))
+  }
+})
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 
