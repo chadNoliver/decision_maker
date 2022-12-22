@@ -7,9 +7,8 @@ defmodule DecisionMakerWeb.UserSocket do
   # assign values that can be accessed by your channel topics.
 
   ## Channels
-
   channel "room:*", DecisionMakerWeb.RoomChannel
-
+  channel "room:lobby", DecisionMakerWeb.RoomChannel  #Mix instructed to add
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
   # verification, you can put default assigns into
