@@ -16,12 +16,12 @@ module.exports = {
       },
       keyframes: {
         spin: {
-          '0%, 100%': { transform: 'rotate(-180deg)', background: 'green' },
-          '50%': { transform: 'rotate(180deg)' , background: 'blue'}
+          '0%, 100%': { transform: 'rotate(-180deg)', background: 'lightsteelblue', color: 'lightsteelblue' },
+          '50%': { transform: 'rotate(180deg)' , background: 'peachpuff', color: 'peachpuff' },
         }
       },
       animation: {
-        spin: 'spin 2s ease-in-out infinite',
+        spin: 'spin 5s ease-in-out infinite',
       }
     },
   },
