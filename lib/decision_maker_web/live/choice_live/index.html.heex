@@ -15,6 +15,14 @@
   randoms={@randoms}
 />
 
+<.live_component
+  id="current-users"
+  module={DecisionMakerWeb.ChoiceLive.CurrentUsersComponent}
+  action={@live_action}
+  phx-update="replace"
+  users={@users}
+/>
+
 
 <.live_component
   id="choices"

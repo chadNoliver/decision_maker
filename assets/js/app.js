@@ -18,13 +18,15 @@
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
+import {Socket, Presence} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
-
+let socket = new Socket("/socket", {params: {token: window.userToken}})
+let channel = socket.channel("room:lobby", {username: window.location.search.split("=")[1]})
+let presence = new Presence(channel)
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", info => topbar.delayedShow(200))
@@ -37,9 +39,21 @@ window.addEventListener(`phx:spin`, (e) => {
   }
 })
 
+function renderOnlineUsers(presence) {let response = ""
+
+  presence.list((id, {metas: [first, ...rest]}) => {
+    let count = rest.length + 1
+    response += `<div> ${id} (count: ${count}) </div>`
+  })
+  document.querySelector("main").innerHTML = response
+}
+
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
-
+socket.connect()
+presence.onSync(() => renderOnlineUsers(presence))
+channel.join()
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session

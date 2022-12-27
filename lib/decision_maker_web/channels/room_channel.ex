@@ -1,14 +1,20 @@
 defmodule DecisionMakerWeb.RoomChannel do
   use DecisionMakerWeb, :channel
+  alias DecisionMakerWeb.Presence
 
   @impl true
-  def join("room:lobby", payload, socket) do
-    if authorized?(payload) do
-      {:ok, socket}
-    else
-      {:error, %{reason: "unauthorized"}}
-    end
+  # def join("room:lobby", payload, socket) do
+  #   if authorized?(payload) do
+  #     {:ok, socket}
+  #   else
+  #     {:error, %{reason: "unauthorized"}}
+  #   end
+  # end
+  def join("room:lobby", %{"username" => username}, socket) do
+    send(self(), :after_join)
+    {:ok, assign(socket, :username, username)}
   end
+
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
@@ -25,6 +31,16 @@ defmodule DecisionMakerWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_info(:after_join, socket) do
+    {:ok, _} =
+      Presence.track(socket, socket.assigns.username, %{
+        online_at: inspect(System.system_time(:second))
+      })
+    
+    push(socket, "presence_state", Presence.list(socket))
+    {:noreply, socket}
+  end
+ 
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

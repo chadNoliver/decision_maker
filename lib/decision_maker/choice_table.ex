@@ -5,7 +5,7 @@ defmodule DecisionMaker.ChoiceTable do
 
   import Ecto.Query, warn: false
   alias DecisionMaker.Repo
-
+  alias DecisionMaker.User
   alias DecisionMaker.ChoiceTable.Choice
 
   @doc """
@@ -20,6 +20,10 @@ defmodule DecisionMaker.ChoiceTable do
   def list_choices do
     Repo.all(from c in Choice, order_by: [desc: c.id])
     # Repo.all(Choice)
+  end
+
+  def list_users do
+    Repo.all(from u in User, order_by: [desc: u.id])
   end
 
   @doc """
@@ -38,6 +42,7 @@ defmodule DecisionMaker.ChoiceTable do
   """
   def get_choice!(id), do: Repo.get!(Choice, id)
 
+  def get_user!(id), do: Repo.get!(User, id)
   @doc """
   Creates a choice.
 
@@ -57,6 +62,12 @@ defmodule DecisionMaker.ChoiceTable do
     |> broadcast(:choice_created)
   end
 
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+    |> broadcast(:user_created)
+  end
   @doc """
   Updates a choice.
 
@@ -75,7 +86,12 @@ defmodule DecisionMaker.ChoiceTable do
     |> Repo.update()
     |> broadcast(:choice_updated)
   end
-
+  def update_user(%User{} = user, attrs) do
+    user 
+    |> User.changeset(attrs)
+    |> Repo.update()
+    |> broadcast(:user_updated)
+  end
   @doc """
   Deletes a choice.
 
@@ -92,6 +108,11 @@ defmodule DecisionMaker.ChoiceTable do
     {:ok, %Choice{}} = Repo.delete(choice)
     broadcast({:ok, choice}, :choice_deleted)
   end
+  def delete_user(%User{} = user) do
+    {:ok, %User{}} = Repo.delete(user)
+    broadcast({:ok, user}, :user_deleted)
+  end
+
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking choice changes.
@@ -104,6 +125,10 @@ defmodule DecisionMaker.ChoiceTable do
   """
   def change_choice(%Choice{} = choice, attrs \\ %{}) do
     Choice.changeset(choice, attrs)
+  end
+
+  def change_user(%User{} = user, attrs \\ %{}) do
+    User.changeset(user, attrs)
   end
   
   def subscribe do
@@ -119,5 +144,9 @@ defmodule DecisionMaker.ChoiceTable do
   defp broadcast({:ok, random}, event) do
     Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "randoms", {event, random})
       {:ok, random}
+  end
+  defp broadcast({:ok, user}, event) do
+    Phoenix.PubSub.broadcast(DecisionMaker.PubSub, "users", {event, user})
+      {:ok, user}
   end
 end

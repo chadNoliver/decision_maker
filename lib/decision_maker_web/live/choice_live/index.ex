@@ -4,14 +4,17 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   alias DecisionMaker.ChoiceTable
   alias DecisionMaker.ChoiceTable.Choice
   alias DecisionMaker.Repo
-
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: ChoiceTable.subscribe()
     if connected?(socket), do: Phoenix.PubSub.subscribe(DecisionMaker.PubSub,"random_updated")
+    if connected?(socket), do: Phoenix.PubSub.subscribe(DecisionMaker.PubSub,"user_updated")
+    
+    ChoiceTable.create_user(%{username: MnemonicSlugs.generate_slug})
     {:ok, socket
     |> assign(:choices, list_choices())
     |> assign(:randoms, list_randoms())
+    |> assign(:users, list_users())
     }
   end
 
@@ -76,6 +79,18 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   def handle_info({:choice_updated, _choice}, socket) do
     {:noreply, assign(socket, :choices, list_choices())}
   end
+  def handle_info({:user_created, user}, socket) do
+    {:noreply, Phoenix.Component.update(socket, :users, fn users -> [user | users] end)}
+  end
+
+  def handle_info({:user_deleted, user}, socket) do
+    {:noreply, Phoenix.Component.update(socket, :users , fn users -> users -- [user] end)}
+  end
+
+  def handle_info({:user_updated, _user}, socket) do
+    {:noreply, assign(socket, :useres, list_users())}
+  end
+
 
   def handle_info({:random_updated, random}, socket) do
     socket =
@@ -93,6 +108,11 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   defp list_choices do
     ChoiceTable.list_choices()
   end
+
+  defp list_users do
+    ChoiceTable.list_users()
+  end
+
 
   defp list_randoms do
     if (:randoms == nil) do
