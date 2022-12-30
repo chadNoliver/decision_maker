@@ -4,12 +4,23 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
   alias DecisionMaker.ChoiceTable
   alias DecisionMaker.ChoiceTable.Choice
   alias DecisionMaker.Repo
-
+  alias DecisionMakerWeb.Presence
+  
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: ChoiceTable.subscribe()
     if connected?(socket), do: Phoenix.PubSub.subscribe(DecisionMaker.PubSub,"random_updated")
+    topic = "room:42"
+    initial_count = Presence.list(topic) |> map_size
+    DecisionMakerWeb.Endpoint.subscribe(topic)
+    Presence.track(
+      self(),
+      topic,
+      socket.id,
+      %{}
+    )
     {:ok, socket
+    |> assign(:reader_count, initial_count)
     |> assign(:choices, list_choices())
     |> assign(:randoms, list_randoms())
     }
@@ -65,6 +76,15 @@ defmodule DecisionMakerWeb.ChoiceLive.Index do
 
 
   @impl true
+  def handle_info(
+      %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
+      %{assigns: %{reader_count: count}} = socket
+    ) do
+    reader_count = count + map_size(joins) - map_size(leaves)
+
+    {:noreply, assign(socket, :reader_count, reader_count)}
+  end
+
   def handle_info({:choice_created, choice}, socket) do
     {:noreply, Phoenix.Component.update(socket, :choices, fn choices -> [choice | choices] end)}
   end
