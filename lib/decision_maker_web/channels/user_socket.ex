@@ -10,7 +10,7 @@ defmodule DecisionMakerWeb.UserSocket do
   # Uncomment the following line to define a "room:*" topic
   # pointing to the `DecisionMakerWeb.RoomChannel`:
   #
-  # channel "room:*", DecisionMakerWeb.RoomChannel
+  channel "room:*", DecisionMakerWeb.RoomChannel
   #
   # To create a channel file, use the mix task:
   #
