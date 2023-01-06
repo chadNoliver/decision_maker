@@ -17,9 +17,11 @@ defmodule DecisionMaker.Application do
       # Start Finch
       {Finch, name: DecisionMaker.Finch},
       # Start the Endpoint (http/https)
-      DecisionMakerWeb.Endpoint
+      DecisionMakerWeb.Endpoint,
       # Start a worker by calling: DecisionMaker.Worker.start_link(arg)
       # {DecisionMaker.Worker, arg}
+      DecisionMakerWeb.Presence
+      # Start Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

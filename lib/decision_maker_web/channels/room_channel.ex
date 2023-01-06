@@ -1,28 +1,31 @@
 defmodule DecisionMakerWeb.RoomChannel do
   use DecisionMakerWeb, :channel
-
+  alias DecisionMakerWeb.Presence
+  
   # @impl true
   # def join("room:lobby", socket) do
   #     {:ok, socket}
   # end
 
   @impl true
-  def join("room:lobby", payload, socket) do
-    if authorized?(payload) do
-      {:ok, socket}
-    else
-      {:error, %{reason: "unauthorized"}}
-    end
+  def join("room:lobby", %{}, socket) do
+    # if authorized?(payload) do
+      name = MnemonicSlugs.generate_slug(2)
+      send(self(), :after_join)
+      {:ok, assign(socket, :name, name)}
+    # else
+      # {:error, %{reason: "unauthorized"}}
+    # end
   end
 
-  @impl true
-  def join("room:42", payload, socket) do
-    if authorized?(payload) do
-      {:ok, socket}
-    else
-      {:error, %{reason: "unauthorized"}}
-    end
-  end
+  # @impl true
+  # def join("room:42", payload, socket) do
+  #   if authorized?(payload) do
+  #     {:ok, socket}
+  #   else
+  #     {:error, %{reason: "unauthorized"}}
+  #   end
+  # end
 
 
 
@@ -44,5 +47,14 @@ defmodule DecisionMakerWeb.RoomChannel do
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
+  end
+
+  def handle_info(:after_join, socket) do
+    {:ok, _} =
+      Presence.track(socket, socket.assigns.name, %{
+        online_at: inspect(System.system_time(:second))
+      })
+    push(socket, "presence_state", Presence.list(socket))
+    {:noreply, socket}
   end
 end
