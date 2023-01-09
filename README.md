@@ -17,7 +17,8 @@ options and participating in the random selection of the final decision.
 - [X] Add initial annotations
 - [X] Random selection  
 - [X] Animations for random selection  
-- [ ] Actual users/usernames  
+- [X] Actual users/usernames  
+- [ ] Link usernames to CRUD operations
 - [ ] Multiple cursors/evidence of multiple users  
 - [ ] Multiple Stages of random selection  
 - [ ] Home screen
