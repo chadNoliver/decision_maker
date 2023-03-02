@@ -101,6 +101,15 @@ tree -I '_build|deps|priv|test'
   - Controllers - elixir modules; actions - `/2` functions defined within them
   - 
 ## Running
+### Requirements
+    - hex
+    - elixir >= 14+
+    - erlang   
+    - postgres
+
+### Set your postgres password
+    - For example dev password in `./config/dev.exs` is defaulted to username `postgres` and password `postgres`
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
