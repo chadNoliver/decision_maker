@@ -21,7 +21,7 @@ defmodule DecisionMakerWeb.Router do
     live "/choices", ChoiceLive.Index, :index
     live "/choices/new", ChoiceLive.Index, :new
     live "/choices/:id/edit", ChoiceLive.Index, :edit
-
+    live "/restaurants", RestaurantsLive.Index, :index
 
     live "/choices/:id", ChoiceLive.Show, :show
     live "/choices/:id/show/edit", ChoiceLive.Show, :edit

@@ -1,0 +1,39 @@
+<.header>
+  Listing Restaurants
+  <:actions>
+    <.link patch={~p"/restaurants/new"}>
+      <.button>New Restaurants</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="restaurants" rows={@restaurants_collection} row_click={&JS.navigate(~p"/restaurants/#{&1}")}>
+  <:col :let={restaurants} label="Name"><%= restaurants.name %></:col>
+  <:action :let={restaurants}>
+    <div class="sr-only">
+      <.link navigate={~p"/restaurants/#{restaurants}"}>Show</.link>
+    </div>
+    <.link patch={~p"/restaurants/#{restaurants}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={restaurants}>
+    <.link phx-click={JS.push("delete", value: %{id: restaurants.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="restaurants-modal"
+  show
+  on_cancel={JS.navigate(~p"/restaurants")}
+>
+  <.live_component
+    module={DecisionMakerWeb.RestaurantsLive.FormComponent}
+    id={@restaurants.id || :new}
+    title={@page_title}
+    action={@live_action}
+    restaurants={@restaurants}
+    navigate={~p"/restaurants"}
+  />
+</.modal>
